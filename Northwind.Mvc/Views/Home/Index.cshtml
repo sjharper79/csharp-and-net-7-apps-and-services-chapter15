@@ -7,19 +7,37 @@
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
+    <div class="row">
+        <div class="col">
+            <h2>Live</h2>
+            <p class="alert alert-info">
+                UTC: @DateTime.UtcNow.ToLongDateString() at
+                @DateTime.UtcNow.ToLongTimeString()
+            </p>
+        </div>
+        <div class="col">
+            <h2>Cached</h2>
+            <p class="alert alert-secondary">
+                <cache expires-after="@TimeSpan.FromSeconds(10)">
+                    UTC: @DateTime.UtcNow.ToLongDateString() at
+                    @DateTime.UtcNow.ToLongTimeString()
+                </cache>
+            </p>
+        </div>
+    </div>
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>@Localizer["Order Id"]</th>
                 <th>@Localizer["Order Date"]</th>
-                 <th>@Localizer["Company Name"]</th>
-                 <th>@Localizer["Country"]</th>
-                 <th>@Localizer["Item Count"]</th>
+                <th>@Localizer["Company Name"]</th>
+                <th>@Localizer["Country"]</th>
+                <th>@Localizer["Item Count"]</th>
                 <th>@Localizer["Order Total"]</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(Order order in Model)
+            @foreach (Order order in Model)
             {
                 <tr>
                     <td>@order.OrderId</td>
@@ -35,7 +53,7 @@
     <a id="endOfTable" />
     <div class="container">
         @Html.ActionLink("View our privacy policy with an HTML Helper.", "Privacy", "Index")
-        <p/>
+        <p />
         <a asp-action="Privacy" asp-controller="Home">View our privacy policy with a Tag Helper.</a>
     </div>
 </div>
