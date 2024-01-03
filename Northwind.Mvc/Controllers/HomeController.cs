@@ -1,20 +1,30 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.Mvc.Models;
+using Packt.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace Northwind.Mvc.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    private readonly NorthwindContext db;
+    public HomeController(ILogger<HomeController> logger, NorthwindContext db)
     {
-        _logger = logger;
+        _logger = logger;        this.db = db;
+
     }
 
     public IActionResult Index()
     {
-        return View();
+        IEnumerable<Order> model = db.Orders
+            .Include(order => order.Customer)
+            .Include(order => order.OrderDetails)
+            .OrderByDescending(order => order.OrderDetails
+                .Sum(detail => detail.Quantity * detail.UnitPrice))
+            .AsEnumerable();
+
+        return View(model);
     }
 
     public IActionResult Privacy()
