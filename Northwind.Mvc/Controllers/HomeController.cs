@@ -15,13 +15,23 @@ public class HomeController : Controller
 
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? id = null, string? country = null)
     {
         IEnumerable<Order> model = db.Orders
             .Include(order => order.Customer)
-            .Include(order => order.OrderDetails)
+            .Include(order => order.OrderDetails);
+
+        if (id != null)
+        {
+            model = model.Where(order => order.Customer?.CustomerId == id);
+        }
+        if (country != null)
+        {
+            model = model.Where(order => order.Customer?.Country == country);
+        }
+        model = model
             .OrderByDescending(order => order.OrderDetails
-                .Sum(detail => detail.Quantity * detail.UnitPrice))
+            .Sum(detail => detail.Quantity * detail.UnitPrice))
             .AsEnumerable();
 
         return View(model);
@@ -36,5 +46,10 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public IActionResult Shipper(Shipper shipper)
+    {
+        return View(shipper);
     }
 }

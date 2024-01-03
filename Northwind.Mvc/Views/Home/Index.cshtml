@@ -32,4 +32,10 @@
             }
         </tbody>
     </table>
+    <a id="endOfTable" />
+    <div class="container">
+        @Html.ActionLink("View our privacy policy with an HTML Helper.", "Privacy", "Index")
+        <p/>
+        <a asp-action="Privacy" asp-controller="Home">View our privacy policy with a Tag Helper.</a>
+    </div>
 </div>
